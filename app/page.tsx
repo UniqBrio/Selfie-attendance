@@ -141,7 +141,7 @@ export default function SelfieAttendance() {
     
     context.drawImage(video, 0, 0, canvas.width, canvas.height)
     const now = new Date()
-    const timestampText = now.toISOString() // Use ISO 8601 format for reliable parsing
+    const timestampText = now.toLocaleString()
     setTimestamp(timestampText) 
 
     
@@ -325,7 +325,7 @@ export default function SelfieAttendance() {
                 </Badge>
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
-                  {new Date().toLocaleTimeString()}
+                  {timestamp}
                 </Badge>
               </div>
             )}
@@ -347,9 +347,9 @@ export default function SelfieAttendance() {
                 <div className="flex gap-2">
                   <Button onClick={capturePhoto} disabled={!stream || !location || isLoading} className="flex-1">
                     <Camera className="w-4 h-4 mr-2" />
-                    Capture Selfie
+                    Capture Attendance
                   </Button>
-                  <Button onClick={switchCamera} variant="outline" size="icon" disabled={isLoading}>
+                  <Button onClick={switchCamera} variant="outline" size="icon" disabled={isLoading} className="md:hidden">
                     <RotateCcw className="w-4 h-4" />
                   </Button>
                 </div>
