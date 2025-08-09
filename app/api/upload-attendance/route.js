@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { uploadImageToFirebase } from '../../../services/imageUploadService'; // Adjust path as needed
+import { uploadImageToR2 } from '../../../services/imageUploadService'; // Adjust path as needed
 // Assuming your AttendanceModel is set up for Mongoose
 // import AttendanceModel from '../../../models/AttendanceModel'; // Adjust path as needed
 // import connectDB from '../../../lib/mongodb'; // Your DB connection utility
@@ -40,11 +40,11 @@ export async function POST(req) {
       mimetype: imageFile.type,
     };
 
-    // Define the destination path in Firebase Storage.
+    // Define the destination path in R2 Storage.
     // You might want to make this more dynamic, e.g., include userId or a date.
     const destinationFolder = `attendance_selfies/${userId || 'general_uploads'}/`;
 
-    const selfieImageUrl = await uploadImageToFirebase(fileToUpload, destinationFolder);
+    const selfieImageUrl = await uploadImageToR2(fileToUpload, destinationFolder);
 
     // --- Save to Database (Example) ---
     // const newAttendance = new AttendanceModel({
@@ -66,7 +66,7 @@ export async function POST(req) {
     if (error.message.includes('Not an image')) {
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
-    // Check for specific Firebase errors if needed
+    // Check for specific R2 errors if needed
     return NextResponse.json({ message: 'Failed to upload attendance image.', error: error.message }, { status: 500 });
   }
 }

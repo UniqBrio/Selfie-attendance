@@ -289,7 +289,7 @@ export default function SelfieAttendance() {
                 </p>
               )}
             </div>
-            <Button onClick={reset} className="w-full" variant="outline">
+            <Button onClick={reset} className="w-full">
               <RotateCcw className="w-4 h-4 mr-2" />
               Take Another Attendance
             </Button>
@@ -319,11 +319,11 @@ export default function SelfieAttendance() {
 
             {location && (
               <div className="flex flex-wrap gap-2">
-                <Badge variant="secondary" className="flex items-center gap-1">
+                <Badge className="flex items-center gap-1">
                   <MapPin className="w-3 h-3" />
                   Location Ready
                 </Badge>
-                <Badge variant="secondary" className="flex items-center gap-1">
+                <Badge className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {timestamp}
                 </Badge>
@@ -349,7 +349,7 @@ export default function SelfieAttendance() {
                     <Camera className="w-4 h-4 mr-2" />
                     Capture Attendance
                   </Button>
-                  <Button onClick={switchCamera} variant="outline" size="icon" disabled={isLoading} className="md:hidden">
+                  <Button onClick={switchCamera} disabled={isLoading} className="md:hidden p-2 rounded-full" type="button">
                     <RotateCcw className="w-4 h-4" />
                   </Button>
                 </div>
@@ -391,7 +391,7 @@ export default function SelfieAttendance() {
                       </>
                     )}
                   </Button>
-                  <Button onClick={reset} variant="outline">
+                  <Button onClick={reset} className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
                     Retake
                   </Button>
                 </div>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb'; // Corrected path if your file is mongodb.ts
 import Attendance, { IAttendance } from '@/models/Attendance'; // Import Mongoose model and interface
 // Update the import path below to the correct location of imageUploadService in your project structure
-import { uploadImageToFirebase } from '@/services/imageUploadService'; // Adjust path if needed
+import { uploadImageToR2 } from '@/services/imageUploadService'; // Adjust path if needed
 
 // Define the expected request body structure from the frontend
 interface AttendanceRequestBody {
@@ -14,7 +14,7 @@ interface AttendanceRequestBody {
     accuracy: number;
     address?: string;
   };
-  userId?: string; // Optional: To organize images by user in Firebase
+  userId?: string; // Optional: To organize images by user in R2
 }
 
 export async function POST(request: Request) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
-    // --- 2. Handle the photo data and upload to Firebase ---
+    // --- 2. Handle the photo data and upload to R2 ---
     const photoDataString = body.photo; // e.g., "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ..."
 
     // Extract mimetype and base64 data
@@ -56,14 +56,14 @@ export async function POST(request: Request) {
         mimetype: mimetype,
     };
 
-    // Define a destination path in Firebase Storage.
+    // Define a destination path in R2 Storage.
     const destinationFolder = `attendance_selfies/${body.userId || 'unknown_user'}/`; // Organize by userId if available
-    const firebaseImageUrl = await uploadImageToFirebase(fileToUpload, destinationFolder);
-    console.log("API Route: Image uploaded to Firebase:", firebaseImageUrl);
+    const r2ImageUrl = await uploadImageToR2(fileToUpload, destinationFolder);
+    console.log("API Route: Image uploaded to R2:", r2ImageUrl);
 
     // --- 3. Create and save the attendance record using Mongoose ---
     const attendanceDocument = new Attendance({
-      imageUrl: firebaseImageUrl, // Use the URL from Firebase Storage
+      imageUrl: r2ImageUrl, // Use the URL from R2 Storage
       timestamp: new Date(body.timestamp), 
       location: {
         latitude: body.location.latitude,
@@ -74,12 +74,12 @@ export async function POST(request: Request) {
     });
 
     console.log("API Route: Attempting to save document:", attendanceDocument);
-    const savedAttendance = await attendanceDocument.save() as IAttendance;
-    console.log('API Route: Attendance Record saved to MongoDB:', (savedAttendance._id as any).toString());
+    const savedAttendance = await attendanceDocument.save();
+    console.log('API Route: Attendance Record saved to MongoDB:', (savedAttendance as any)._id.toString());
 
     // --- 4. Send a success response ---
     const responseData = {
-      _id: (savedAttendance._id as any).toString(),
+      _id: (savedAttendance as any)._id.toString(),
       imageUrl: savedAttendance.imageUrl,
       timestamp: savedAttendance.timestamp.toISOString(),
       location: savedAttendance.location,
