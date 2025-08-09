@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Camera, MapPin, Clock, CheckCircle, AlertCircle, RotateCcw } from "lucide-react"
+import { Camera, MapPin, Clock, CheckCircle, AlertCircle, RotateCcw, RotateCw } from "lucide-react"
 
 interface LocationData {
   latitude: number
@@ -349,8 +349,13 @@ export default function SelfieAttendance() {
                     <Camera className="w-4 h-4 mr-2" />
                     Capture Attendance
                   </Button>
-                  <Button onClick={switchCamera} disabled={isLoading} className="md:hidden p-2 rounded-full" type="button">
-                    <RotateCcw className="w-4 h-4" />
+                  <Button 
+                    onClick={switchCamera} 
+                    disabled={isLoading} 
+                    className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 p-2" 
+                    title="Switch Camera"
+                  >
+                    <RotateCw className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -391,6 +396,14 @@ export default function SelfieAttendance() {
                       </>
                     )}
                   </Button>
+                  <Button 
+                    onClick={switchCamera} 
+                    disabled={isLoading} 
+                    className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 p-2"
+                    title="Switch Camera"
+                  >
+                    <RotateCw className="w-4 h-4" />
+                  </Button>
                   <Button onClick={reset} className="border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
                     Retake
                   </Button>
@@ -408,7 +421,7 @@ export default function SelfieAttendance() {
               <p>• Camera and location permissions required</p>
               <p>• Photo includes GPS coordinates and timestamp</p>
               <p>• Works on both desktop and mobile devices</p>
-              <p>• Use the rotate button to switch between front/back camera</p>
+              <p>• Use the camera flip button (↻) to switch between front/back camera</p>
             </div>
           </CardContent>
         </Card>
